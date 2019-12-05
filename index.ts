@@ -8,7 +8,7 @@ const server = new Server(app);
 const io = socket_io(server);
 import * as path from 'path';
 
-// import {  } from './sockets';
+import { client as clientEvents, panel as panelEvents } from './sockets';
 
 import config from './config';
 
@@ -17,8 +17,11 @@ app.set('port', config.PORT);
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 /* Routes */
+const panelIo = io.of('/ws/panel');
+const clientIo = io.of('/ws/queue');
 
-io.of('/ws/queue');
+clientEvents({ clientIo, panelIo });
+panelEvents(panelIo);
 
 app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));

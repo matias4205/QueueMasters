@@ -1,10 +1,20 @@
-import { ALL_VIDEOS, Video } from './Videos';
+import { QueueItem, Video } from './Videos';
+import debug from 'debug';
+
+const debugLog = debug('app:queue');
 
 class VideoQueue{
     private static instance: VideoQueue;
-    private static queue = ALL_VIDEOS;
+    private queue: QueueItem[] = [];
+    private viewing: Number = 0;
     
-    private constructor(){}
+    private constructor(){
+        setInterval(this.printState.bind(this), 3000);
+    }
+
+    private printState(){
+        debugLog(`Watching: ${this.viewing} - Videos: ${this.queue.length}`);
+    }
 
     static getInstance(): VideoQueue{
         if(!VideoQueue.instance){
@@ -15,38 +25,65 @@ class VideoQueue{
     }
 
     public next(){
-        VideoQueue.queue.shift();
+        this.queue.shift();
     }
 
-    public add(video: Video){
-        VideoQueue.queue.push(video);
+    public add(item: QueueItem){
+        this.queue.push(item);
     }
 
-    public get(top = 4){
-        return VideoQueue.queue.slice(0, top);
+    public get(top = 4): QueueItem[]{
+        return this.queue.length ? this.queue.slice(0, top) : [];
     }
 
-    public shuffle(){
-        const length = VideoQueue.queue == null ? 0 : VideoQueue.queue.length
+    public shuffle(): QueueItem[]{
+        const length = this.queue == null ? 0 : this.queue.length
         if (!length) {
             return [];
         }
         let index = -1;
         const lastIndex = length - 1;
-        const result = [...VideoQueue.queue];
+        const result = [...this.queue];
         while (++index < length) {
             const rand = index + Math.floor(Math.random() * (lastIndex - index + 1));
             const value = result[rand];
             result[rand] = result[index];
             result[index] = value;
         }
-        VideoQueue.queue = result;
+        this.queue = result;
         
-        return VideoQueue.queue;
+        return this.queue;
     }
 
-    public get queueLength(){
-        return VideoQueue.queue.length;
+    public like(videoId: string){
+        const videoIndex = this.queue.findIndex(({ video }) => {
+            return video.id === videoId;
+        });
+
+        this.queue[videoIndex].likes =+ 1;
+    }
+
+    public whoAdded(videoId: string): {clientId: string, title: string}{
+        const videoIndex = this.queue.findIndex(({ video }) => {
+            return video.id === videoId;
+        });
+
+        return { 
+            clientId: this.queue[videoIndex].clientId,
+            title: this.queue[videoIndex].video.title
+        };
+    }
+
+    public get queueLength(): Number{
+        return this.queue.length;
+    }
+
+    public get viewers(): Number{
+        return this.viewing;
+    }
+
+    public set viewers(viewers: Number){
+        this.viewing = viewers;
     }
 }
 

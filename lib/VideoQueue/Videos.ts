@@ -1,39 +1,14 @@
+import { Socket } from 'socket.io';
+
 export interface Video{
-    id: String,
-    url: String,
+    id: string,
+    url: string,
     duration: Number,
-    title: String
+    title: string
 }
 
-export const ALL_VIDEOS: Video[] = [
-    {   
-        id: "YcrordOZxDw",
-        url: 'https://www.youtube.com/watch?v=YcrordOZxDw',
-        duration: 120,
-        title: 'Duki en vivo'
-    },
-    {
-        id: "qKIChK1mHiY",
-        url: 'https://www.youtube.com/watch?v=qKIChK1mHiY',
-        duration: 120,
-        title: 'CARAVANA - WOS || Álbum Completo'
-    },
-    {
-        id: "_ySCDk8_e9o",
-        url: 'https://www.youtube.com/watch?v=_ySCDk8_e9o',
-        duration: 220,
-        title: '¿ACZINO DEBIO GANARLE A WOS? - RED BULL INTERNACIONAL 2019'
-    },
-    {
-        id: "_ySCDk8_e9o",
-        url: 'https://www.youtube.com/watch?v=_ySCDk8_e9o',
-        duration: 220,
-        title: '¿ACZINO DEBIO GANARLE A WOS? - RED BULL INTERNACIONAL 2019'
-    },
-    {
-        id: "_ySCDk8_e9o",
-        url: 'https://www.youtube.com/watch?v=_ySCDk8_e9o',
-        duration: 220,
-        title: '¿ACZINO DEBIO GANARLE A WOS? - RED BULL INTERNACIONAL 2019'
-    }
-];
+export interface QueueItem{
+    clientId: string,
+    video: Video,
+    likes: Number
+}
