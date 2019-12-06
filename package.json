@@ -10,7 +10,8 @@
     "prestart": "npm run tsc",
     "start": "node ./build/index.js",
     "dev": "ts-node-dev --respawn --transpileOnly ./index.ts",
-    "dev:debug": "DEBUG=express:*,app:* npm run dev"
+    "dev:debug": "DEBUG=express:*,app:* npm run dev",
+    "dev:sass": "npx node-sass --watch ./frontend/assets/styles/scss --output ./frontend/assets/styles/css"
   },
   "keywords": [],
   "author": "",

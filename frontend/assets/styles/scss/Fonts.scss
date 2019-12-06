@@ -1,0 +1,15 @@
+$font-dir: '../../fonts/';
+
+@font-face{
+    font-family: 'Nunito-Sans';
+    src: url('#{$font-dir}NunitoSans-Black.ttf');
+    font-weight: bolder;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Nunito-Sans';
+    src: url('#{$font-dir}NunitoSans-Bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
