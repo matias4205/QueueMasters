@@ -21,7 +21,7 @@ const panelIo = io.of('/ws/panel');
 const clientIo = io.of('/ws/queue');
 
 clientEvents({ clientIo, panelIo });
-panelEvents(panelIo);
+panelEvents({ panelIo, clientIo });
 
 app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));

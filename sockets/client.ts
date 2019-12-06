@@ -9,7 +9,7 @@ const debugLog = debug('app:client');
 const VideoQueue = videoQueue.getInstance();
 
 const setViewers = (clientIo: Namespace, panelIo: Namespace) => {
-    clientIo.clients((error, clients) => {
+    clientIo.clients((error: any, clients: any) => {
         if(error) throw error;
         VideoQueue.viewers = clients.length;
         panelIo.emit('set:viewers', VideoQueue.viewers);
@@ -39,7 +39,10 @@ export default ({ clientIo, panelIo }: { clientIo: Namespace, panelIo: Namespace
             debugLog("A client liked: ", songId);
             VideoQueue.like(songId);
             const { clientId, title } = VideoQueue.whoAdded(songId);
-            clientIo.to(clientId).emit('set:like', title);
+            if(clientId !== client.id){
+                clientIo.to(clientId).emit('set:like', title);
+            }
+            panelIo.emit('set:queue', VideoQueue.get());
         });
         
         client.on("disconnect", () => {

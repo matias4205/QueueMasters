@@ -11,9 +11,13 @@ queue.on("connect", () => {
    setTimeout(() => {
       queue.emit('like', 'ewvIlJSBIGM');
    }, 4000);
-   setTimeout(() => {
-      queue.emit('get', (data: string) => {
-         console.log(data);
-      });
-   }, 8000);
+});
+
+queue.on('set:queue', (data) => {
+   // console.log("Someone added: ", data.video.title);
+   console.log(data);
+});
+
+queue.on('set:like', (data) => {
+   console.log("Someone liked your video: ", data);
 });

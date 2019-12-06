@@ -7,6 +7,7 @@ class VideoQueue{
     private static instance: VideoQueue;
     private queue: QueueItem[] = [];
     private viewing: Number = 0;
+    private queueSliceTop = 4;
     
     private constructor(){
         setInterval(this.printState.bind(this), 3000);
@@ -32,8 +33,14 @@ class VideoQueue{
         this.queue.push(item);
     }
 
-    public get(top = 4): QueueItem[]{
-        return this.queue.length ? this.queue.slice(0, top) : [];
+    public get(videoId?: String): QueueItem[] | QueueItem | undefined{
+        if(videoId){
+            return this.queue.find((item) => {
+                return item.video.id === videoId;
+            });
+        }
+
+        return this.queue.length ? this.queue.slice(0, this.queueSliceTop) : [];
     }
 
     public shuffle(): QueueItem[]{
@@ -59,6 +66,10 @@ class VideoQueue{
         const videoIndex = this.queue.findIndex(({ video }) => {
             return video.id === videoId;
         });
+        
+        if(videoIndex === -1){
+            return;
+        }
 
         this.queue[videoIndex].likes =+ 1;
     }
