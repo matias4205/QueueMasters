@@ -4,13 +4,13 @@ import './styles/Client.scss';
 
 import likeImg from '../../assets/static/like.png';
 import plusImg from '../../assets/static/plus.png';
-import linkImg from '../../assets/static/link.png';
 import sendImg from '../../assets/static/send.png';
 
 import Overlay from '../../components/Overlay';
 import CircularButton from '../../components/CircularButton';
 import QueueItem from './components/QueueItem';
 import QueueLayout from './components/QueueLayout';
+import LinkInput from './components/LinkInput';
 
 class Client extends Component {
   constructor(props) {
@@ -60,9 +60,10 @@ class Client extends Component {
   }
 
   renderQueueItems = (songs) => (
-    songs.map(({ title, id }, index) => (
-      <QueueItem title={title} active={index === 0} key={id} />
-    ))
+    songs.length > 0 ?
+      songs.map(({ title, id }, index) => (
+        <QueueItem title={title} active={index === 0} key={id} />
+      )) : 'Queue has no items!'
   )
 
   render() {
@@ -82,12 +83,7 @@ class Client extends Component {
         </div>
         <Overlay onClose={this.handleClose} isActive={overlay}>
           <div className='flex-container'>
-            <div className='input'>
-              <input type='text' className='input__field' placeholder='Paste Link' />
-              <span className='icon'>
-                <img src={linkImg} alt='send' />
-              </span>
-            </div>
+            <LinkInput />
             <CircularButton classes={['circular-button__action--send']} img={sendImg} alt='send' handler={this.handleSend} />
           </div>
         </Overlay>

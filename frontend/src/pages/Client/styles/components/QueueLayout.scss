@@ -2,7 +2,9 @@
 
 .queue{
     padding-left: 8px;
-    
+    list-style-type: none;
+    padding: 0px;
+
     .queue__item{
         font-size: 50px;
         overflow: hidden;

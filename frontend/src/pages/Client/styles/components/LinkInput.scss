@@ -1,0 +1,30 @@
+@import '../../../../assets/styles/Vars.scss';
+
+.input{
+    position: relative;
+    width: 80%;
+    margin-top: 60px;
+
+    span{
+        position: absolute;
+        top: 6px;
+        left: 10px;
+        font-size: 15px;
+
+        img{
+            width: 28px;
+        }
+    }
+}
+
+.input__field{
+    border: none;
+    border-bottom: 2px #4b4b4bad solid;
+    color: $main-font-color;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    outline: none;
+    padding-left: 50px;
+    width: 100%;
+}
