@@ -1,12 +1,13 @@
 import React from 'react';
 
-import Panel from './pages/Panel';
 import Client from './pages/Client';
 
+import './assets/styles/General.scss';
+
 const App = () => {
-    return (
-        <Client/>
-    );
+  return (
+    <Client />
+  );
 };
 
 export default App;

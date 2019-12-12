@@ -1,0 +1,20 @@
+.circular-button{
+    border-radius: 50%;
+    border: none;
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    transition: 200ms;
+    background-color: red;
+
+    img{
+        width: 30px;
+    }
+}
+
+.circular-button:active{
+    transform: scale(.8);
+}

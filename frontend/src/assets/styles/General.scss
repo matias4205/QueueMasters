@@ -1,0 +1,14 @@
+@import './Fonts.scss';
+@import './Vars.scss';
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Nunito-Sans', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    color: $main-font-color;
+    margin: 0px;
+}

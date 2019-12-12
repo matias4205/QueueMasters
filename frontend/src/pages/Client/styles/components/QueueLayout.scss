@@ -1,0 +1,25 @@
+@import '../../../../assets/styles/Vars.scss';
+
+.queue{
+    padding-left: 8px;
+    
+    .queue__item{
+        font-size: 50px;
+        overflow: hidden;
+        text-overflow: clip;
+        white-space: nowrap;
+        font-weight: 500;
+        color: $mutted-font-color;
+        margin-bottom: 10px;
+    }
+
+    .queue__item.active{
+        color: $main-font-color;
+    }
+
+    @for $i from 0 through 3{
+        .queue__item--#{$i+1}{
+            font-size: 55px - ($i * 8.5);
+        }
+    }
+}
