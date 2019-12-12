@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './styles/Client.scss';
+import './Client.scss';
 
 import likeImg from '../../assets/static/like.png';
 import plusImg from '../../assets/static/plus.png';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../styles/components/QueueLayout.scss';
+import './styles/QueueLayout.scss';
 
 const QueueLayout = ({ children }) => {
   return (

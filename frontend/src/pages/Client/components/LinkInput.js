@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../styles/components/LinkInput.scss';
+import './styles/LinkInput.scss';
 
 import linkImg from '../../../assets/static/link.png';
 
