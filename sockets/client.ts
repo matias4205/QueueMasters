@@ -20,11 +20,11 @@ export default ({ clientIo, panelIo }: { clientIo: Namespace, panelIo: Namespace
     clientIo.on('connection', (client) => {
         debugLog("Client connected with id: ", client.id);
         setViewers(clientIo, panelIo);
-        
-        client.on('get', (cb: Function) => {
+        client.emit('set:queue', VideoQueue.get());
+        /* client.on('get', (cb: Function) => {
             debugLog("A client asked for queue!");
             cb(VideoQueue.get());
-        });
+        }); */
         
         client.on("add", async (url: string) => {
             debugLog("A client added: ", url);

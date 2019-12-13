@@ -11,6 +11,7 @@ import CircularButton from '../../components/CircularButton';
 import QueueItem from './components/QueueItem';
 import QueueLayout from './components/QueueLayout';
 import LinkInput from './components/LinkInput';
+import Socket from './components/Socket';
 
 class Client extends Component {
   constructor(props) {
@@ -18,6 +19,9 @@ class Client extends Component {
 
     this.state = {
       overlay: false,
+      connected: false,
+      error: null,
+      link: '',
       songs: [
         {
           id: 12,
@@ -52,22 +56,79 @@ class Client extends Component {
   }
 
   handleSend = () => {
-    console.log('SENT!');
+    const { link } = this.state;
+    Socket.instance().emit('add', link);
   }
 
   handleLike = () => {
     console.log('LIKED!');
   }
 
+  handleLinkChange = ({ currentTarget }) => {
+    this.setState({
+      link: currentTarget.value,
+    });
+  }
+
   renderQueueItems = (songs) => (
     songs.length > 0 ?
-      songs.map(({ title, id }, index) => (
+      songs.map(({ video: { title, id } }, index) => (
         <QueueItem title={title} active={index === 0} key={id} />
       )) : 'Queue has no items!'
   )
 
+  bindHandlers(instance) {
+    instance.on('disconnect', () => {
+      this.setState({
+        connected: false,
+      });
+    });
+    instance.on('set:like', () => {
+      console.log('Liked!');
+    });
+    instance.on('set:queue', (data) => {
+      console.log(data);
+      this.setState({
+        songs: data,
+      });
+    });
+  }
+
+  initializeSocket = async () => {
+    try {
+      await Socket.initConnection(this.bindHandlers.bind(this));
+      this.setState({
+        connected: true,
+      });
+    } catch (err) {
+      this.setState({
+        error: err.message,
+      });
+    }
+  }
+
+  componentDidMount() {
+    this.initializeSocket();
+  }
+
   render() {
-    const { overlay, songs } = this.state;
+    const { overlay, songs, connected, error, link } = this.state;
+
+    if (error) {
+      return (
+        <div>
+          {error}
+        </div>
+      );
+    }
+
+    if (!connected) {
+      return (
+        <div>
+          Connecting...
+        </div>
+      );
+    }
 
     return (
       <>
@@ -77,13 +138,13 @@ class Client extends Component {
             {this.renderQueueItems(songs)}
           </QueueLayout>
           <div className='actions'>
-            <CircularButton classes={['circular-button__action--like']} img={likeImg} alt='like' handler={this.handleLike} />
+            { songs.length > 0 && <CircularButton classes={['circular-button__action--like']} img={likeImg} alt='like' handler={this.handleLike} /> }
             <CircularButton classes={['circular-button__action--add']} img={plusImg} alt='add' handler={this.handleAdd} />
           </div>
         </div>
         <Overlay onClose={this.handleClose} isActive={overlay}>
           <div className='flex-container'>
-            <LinkInput />
+            <LinkInput handleChange={this.handleLinkChange} text={link} />
             <CircularButton classes={['circular-button__action--send']} img={sendImg} alt='send' handler={this.handleSend} />
           </div>
         </Overlay>

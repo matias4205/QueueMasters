@@ -7,12 +7,15 @@ import { Server } from 'http';
 const server = new Server(app);
 const io = socket_io(server);
 import * as path from 'path';
+import cors from 'cors';
 
 import { client as clientEvents, panel as panelEvents } from './sockets';
 
 import config from './config';
 
 app.set('port', config.PORT);
+
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
