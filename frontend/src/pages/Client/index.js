@@ -12,7 +12,7 @@ import QueueItem from './components/QueueItem';
 import QueueLayout from './components/QueueLayout';
 import LinkInput from './components/LinkInput';
 import Socket from './components/Socket';
-import Notification from '../../components/Notification/Notification';
+import { Notification, NotificationManager } from '../../components/Notification';
 
 class Client extends Component {
   constructor(props) {
@@ -24,10 +24,6 @@ class Client extends Component {
       error: null,
       link: '',
       songs: [],
-      notification: {
-        visible: false,
-        text: '',
-      },
     };
   }
 
@@ -63,35 +59,22 @@ class Client extends Component {
     });
   }
 
-  handleNotificationTimeout = () => {
-    this.setState({
-      notification: {
-        visible: false,
-        text: '',
-      },
-    });
-  }
-
   renderQueueItems = (songs) => (
     songs.length > 0 ?
       songs.map(({ video: { title, id } }, index) => (
-        <QueueItem title={title} active={index === 0} key={id} />
+        <QueueItem title={title} index={index} active={index === 0} key={id} />
       )) : 'Queue has no items!'
   )
 
   bindHandlers(instance) {
     instance.on('disconnect', () => {
+      NotificationManager.danger('Server connection lost!');
       this.setState({
         connected: false,
       });
     });
     instance.on('set:like', () => {
-      this.setState({
-        notification: {
-          visible: true,
-          text: 'Someone liked your song!',
-        },
-      });
+      NotificationManager.success('Someone liked your song ❤️!');
     });
     instance.on('set:queue', (data) => {
       console.log(data);
@@ -119,7 +102,7 @@ class Client extends Component {
   }
 
   render() {
-    const { overlay, songs, connected, error, link, notification } = this.state;
+    const { overlay, songs, connected, error, link } = this.state;
 
     if (error) {
       return (
@@ -139,7 +122,7 @@ class Client extends Component {
 
     return (
       <>
-        { notification.visible && <Notification timeout={4000} onTimeout={this.handleNotificationTimeout} text={notification.text} /> }
+        <Notification timeout={4000} />
         <div className='container'>
           <h1 className='title'>Queue</h1>
           <QueueLayout>

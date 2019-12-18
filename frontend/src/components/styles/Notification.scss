@@ -1,3 +1,7 @@
+$danger-color: #FF3A3A;
+$success-color: #44BE6D;
+$warning-color: #F7CC00;
+
 .notification{
     width: 90vw;
     height: 80px;
@@ -6,13 +10,14 @@
     border-radius: 10px;
     left: calc(50% - 90vw / 2);
     top: 20px;
-    animation: 800ms notification_animation forwards;
+    animation: 800ms show_notif forwards;
     
     .notification__container{
         display: flex;
         height: 100%;
         align-items: center;
         justify-content: space-between;
+        position: relative;
 
         .notification__close{
             position: relative;
@@ -48,34 +53,109 @@
             font-weight: bold;
             font-size: 20px;
         }
+
+        .notification__overlay{
+            position: absolute;
+            right: 0px;
+            left: 0px;
+            top: 0px;
+            bottom: 0px;
+            z-index: 10;
+            animation: 800ms fadeIn forwards;
+        }
     }
 
 }
 
-.notification--success{
-    background-color: #44BE6D;
+.notification.hidden{
+    animation: 800ms hide_notif forwards;
+
+    .notification__container{
+        .notification__overlay{
+            animation: 800ms fadeOut forwards;
+        }
+    }
 }
 
-.notification--warning{
-    background-color: #F7CC00;
+.notification.notification--success{
+    background-color: $success-color;
+
+    .notification__container{
+        .notification__overlay{
+            background-color: $success-color;
+        }
+    }
 }
 
-.notification--danger{
-    background-color: #FF3A3A;
+.notification.notification--warning{
+    background-color: $warning-color;
+
+    .notification__container{
+        .notification__overlay{
+            background-color: $warning-color;
+        }
+    }
 }
 
-@keyframes notification_animation{
+.notification.notification--danger{
+    background-color: $danger-color;
+
+    .notification__container{
+        .notification__overlay{
+            background-color: $danger-color;
+        }
+    }
+}
+
+@keyframes show_notif{
     0%{
         transform: translateY(-190px);
-        clip-path: circle(40px at 50% 50%);
+        clip-path: circle(30px at 50% 50%);
     }
 
     50%{
         transform: translateY(0px);
-        clip-path: circle(40px at 50% 50%);
+        clip-path: circle(30px at 50% 50%);
+        .notification__container{
+            background-color: red;
+        }
     }
 
     100%{
         clip-path: circle(100% at 50% 50%);
+    }
+}
+
+@keyframes hide_notif{
+    0%{
+        clip-path: circle(100% at 50% 50%);
+    }
+
+    50%{
+        transform: translateY(0px);
+        clip-path: circle(30px at 50% 50%);
+    }
+
+    100%{
+        transform: translateY(-190px);
+        clip-path: circle(30px at 50% 50%);
+    }
+}
+
+@keyframes fadeIn{
+    0%, 50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut{
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
     }
 }
