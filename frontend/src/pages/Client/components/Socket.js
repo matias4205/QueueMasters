@@ -11,11 +11,11 @@ export default (() => {
     new Promise((res, rej) => {
       try {
         console.log('Trying to connet the servers!');
-        const socket = io.connect(`${WS_BASE_URL}/queue`);
-        socket.on('connect', () => {
+        instance = io.connect(`${WS_BASE_URL}/queue`);
+        instance.on('connect', () => {
           console.log('Conection succesful');
-          cb(socket);
-          res(socket);
+          cb(instance);
+          res(instance);
         });
       } catch (err) {
         console.log(err);
@@ -24,11 +24,8 @@ export default (() => {
     })
   );
 
-  const initConnection = async (cb) => {
-    instance = await connect(cb);
-  };
   return {
-    initConnection,
+    initConnection: connect,
     instance: () => instance,
   };
 })();

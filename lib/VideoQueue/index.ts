@@ -62,16 +62,23 @@ class VideoQueue{
         return this.queue;
     }
 
-    public like(videoId: string){
+    public like(videoId: string, clientId: string): boolean{
         const videoIndex = this.queue.findIndex(({ video }) => {
             return video.id === videoId;
         });
-        
         if(videoIndex === -1){
-            return;
+            return false;
+        }
+        
+        const alreadyLiked = this.queue[videoIndex].likes.findIndex((id) => {
+            return id === clientId;
+        });
+        if(alreadyLiked !== -1){
+            return false;
         }
 
-        this.queue[videoIndex].likes =+ 1;
+        this.queue[videoIndex].likes.push(clientId);
+        return true;
     }
 
     public whoAdded(videoId: string): {clientId: string, title: string}{

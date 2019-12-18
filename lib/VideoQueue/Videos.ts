@@ -10,5 +10,5 @@ export interface Video{
 export interface QueueItem{
     clientId: string,
     video: Video,
-    likes: Number
+    likes: string[]
 }

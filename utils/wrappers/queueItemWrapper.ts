@@ -7,7 +7,7 @@ export default ({ socket, video }: { socket: Socket, video: any }): QueueItem =>
     const queueItem = {
         clientId: socket.id,
         video: videoWrapper(video),
-        likes: 0
+        likes: []
     }
 
     return queueItem;

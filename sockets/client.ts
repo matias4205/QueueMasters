@@ -21,10 +21,6 @@ export default ({ clientIo, panelIo }: { clientIo: Namespace, panelIo: Namespace
         debugLog("Client connected with id: ", client.id);
         setViewers(clientIo, panelIo);
         client.emit('set:queue', VideoQueue.get());
-        /* client.on('get', (cb: Function) => {
-            debugLog("A client asked for queue!");
-            cb(VideoQueue.get());
-        }); */
         
         client.on("add", async (url: string) => {
             debugLog("A client added: ", url);
@@ -36,11 +32,13 @@ export default ({ clientIo, panelIo }: { clientIo: Namespace, panelIo: Namespace
         });
         
         client.on("like", (songId: string) => {
-            debugLog("A client liked: ", songId);
-            VideoQueue.like(songId);
             const { clientId, title } = VideoQueue.whoAdded(songId);
             if(clientId !== client.id){
-                clientIo.to(clientId).emit('set:like', title);
+                debugLog("A client liked: ", songId);
+                const validLike = VideoQueue.like(songId, client.id);
+                if(validLike){
+                    clientIo.to(clientId).emit('set:like', title);
+                }
             }
             panelIo.emit('set:queue', VideoQueue.get());
         });

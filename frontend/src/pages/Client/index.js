@@ -12,6 +12,7 @@ import QueueItem from './components/QueueItem';
 import QueueLayout from './components/QueueLayout';
 import LinkInput from './components/LinkInput';
 import Socket from './components/Socket';
+import Notification from '../../components/Notification/Notification';
 
 class Client extends Component {
   constructor(props) {
@@ -22,24 +23,11 @@ class Client extends Component {
       connected: false,
       error: null,
       link: '',
-      songs: [
-        {
-          id: 12,
-          title: 'Tap Out - The strokes',
-        },
-        {
-          id: 10,
-          title: 'Hijo de la noche - Duki',
-        },
-        {
-          id: 11,
-          title: 'Pa Mi - (Remix)',
-        },
-        {
-          id: 16,
-          title: 'Te robo - Bad Bunny',
-        },
-      ],
+      songs: [],
+      notification: {
+        visible: false,
+        text: '',
+      },
     };
   }
 
@@ -58,15 +46,29 @@ class Client extends Component {
   handleSend = () => {
     const { link } = this.state;
     Socket.instance().emit('add', link);
+    this.setState({
+      overlay: false,
+    });
   }
 
   handleLike = () => {
-    console.log('LIKED!');
+    const { songs: [lastSong] } = this.state;
+
+    Socket.instance().emit('like', lastSong.video.id);
   }
 
   handleLinkChange = ({ currentTarget }) => {
     this.setState({
       link: currentTarget.value,
+    });
+  }
+
+  handleNotificationTimeout = () => {
+    this.setState({
+      notification: {
+        visible: false,
+        text: '',
+      },
     });
   }
 
@@ -84,7 +86,12 @@ class Client extends Component {
       });
     });
     instance.on('set:like', () => {
-      console.log('Liked!');
+      this.setState({
+        notification: {
+          visible: true,
+          text: 'Someone liked your song!',
+        },
+      });
     });
     instance.on('set:queue', (data) => {
       console.log(data);
@@ -112,7 +119,7 @@ class Client extends Component {
   }
 
   render() {
-    const { overlay, songs, connected, error, link } = this.state;
+    const { overlay, songs, connected, error, link, notification } = this.state;
 
     if (error) {
       return (
@@ -132,12 +139,13 @@ class Client extends Component {
 
     return (
       <>
+        { notification.visible && <Notification timeout={4000} onTimeout={this.handleNotificationTimeout} text={notification.text} /> }
         <div className='container'>
           <h1 className='title'>Queue</h1>
           <QueueLayout>
             {this.renderQueueItems(songs)}
           </QueueLayout>
-          <div className='actions'>
+          <div className='actions' style={{ transition: 'all 200ms ease' }}>
             { songs.length > 0 && <CircularButton classes={['circular-button__action--like']} img={likeImg} alt='like' handler={this.handleLike} /> }
             <CircularButton classes={['circular-button__action--add']} img={plusImg} alt='add' handler={this.handleAdd} />
           </div>
