@@ -11,4 +11,4 @@ panel where to see what is the actual queue and the video in progress.
 # What can clients do?
 Clients can **add new a video** as well as **like the current one**. If the video of a client gets liked the client will be notified.
 
-![notification](https://i.imgur.com/zT98wiG.png)
+![notification](https://media.giphy.com/media/dy4hYv3604LQK6t0bj/giphy.gif)
